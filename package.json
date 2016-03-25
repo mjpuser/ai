@@ -1,0 +1,23 @@
+{
+  "name": "ai",
+  "version": "0.0.0",
+  "description": "general ai project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mjpuser/ai.git"
+  },
+  "keywords": [
+    "ai",
+    "javascript"
+  ],
+  "author": "Matthew Prestifilippo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mjpuser/ai/issues"
+  },
+  "homepage": "https://github.com/mjpuser/ai#readme"
+}
