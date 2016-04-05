@@ -12,11 +12,42 @@ const through2 = require('through2');
 // the "critical period" is when dendrites die.  This should speed up
 // processing times, but kills chance of learning it's function.
 
+// CELL TYPES
+// granule cell
+// pyramidal cell - rooted in L1, and nearby L3/L5, out L6, L7 (other areas)
+// stellate cell
+// horizontal cell - rooted in L1 (complex cells?) accept from Martinotti
+// martinotti cell - rooted and nearby in L4, L6, out L1,2,3
+// simple, complex, hypercomplex, receptive fields!!!
+// https://en.wikipedia.org/wiki/Receptive_field
+// Should I be monitoring the SDRs... the mind?
+// different
+
+// CIRCUITS
+// E -> E -> E | Excites
+// E -> E -> I | Inhibits
+// E -> I -> E | Fewer Excitors
+// E -> I -> I | Fewer Inhibitors
+// I -> E -> E | Fewer Excitors
+// I -> E -> I | Fewer Inhibitors
+// I -> I -> E | Fewer Excitors
+// I -> I -> I | Very Few Inhibitors
+
+// Larger Circuits (impossible to have a detailed view here, because it gets super complicated)
+// 10 E -> 10 E -> 10 E | relay
+//  1 E -> 10 E -> 20 E | slightly slower, but larger
+// 10 E -> 10 I -> 10 E | Stops activity
+// 10 E -> 5 E, 5 I -> 10 E | Depends on location, and how they are connected to each other
+//      - allow some, not others
 
 
-module.exports = ({state, threshold }) => {
+
+
+
+module.exports = ({state, threshold, transmitter}) => {
   state = state || 0;
   threshold = threshold || 10;
+  transmitter = transmitter || 1;
   let refractory = false;
   // impulses are constantly being restored to 0 over time.  X number of
   // impulses have to come in around the same time.
@@ -37,7 +68,7 @@ module.exports = ({state, threshold }) => {
   const neutralize = () => {
     if (state) {
       process.nextTick(() => {
-        state = parseInt(state / 2);
+        state = parseInt(state / 3);
         if (state) {
           neutralize();
         }
@@ -56,7 +87,7 @@ module.exports = ({state, threshold }) => {
     process.nextTick(() => {
       state = threshold * 3;
       refractory = true;
-      cell.push(1);
+      cell.push(transmitter);
       neutralize();
     });
   };
