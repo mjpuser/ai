@@ -14,3 +14,5 @@ Bipolar cells relay cone and rod stimuli, and offer a graded potential to horizo
 
 ### Ganglion Cells
 Ganglion cells have on-center and off-center receptive fields.  When a light reaches an on-center ganglion cell, it will inhibit the rods and cones in the surround area.  In an off-center horizontal cell, it will inhibit the photoreceptors in the surrounding area when there is darkness in the middle.  Ganglion cells then relay to the thalamus.
+
+There are two types of ganglion cells, transient and sustained.  Transient ganglion cells will fire rapidly on first excitement, and go back to resting.  Sustained have a smaller initial jump, and stronger idle firing rate.

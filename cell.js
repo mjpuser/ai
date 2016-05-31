@@ -23,6 +23,11 @@ const through2 = require('through2');
 // Should I be monitoring the SDRs... the mind?
 // different
 
+
+// circuits shouldn't be viewed as "what are they doing in general"... Circuits should
+// be viewed as structures that solve a task.  Like, is this a line?  Is this a curve?  Is
+// it moving left, etc...
+
 // CIRCUITS
 // E -> E -> E | Excites
 // E -> E -> I | Inhibits
@@ -41,9 +46,14 @@ const through2 = require('through2');
 //      - allow some, not others
 
 
+const REFRACTOR_MULTIPLIER = 2;
 
-
-
+/**
+ * Create a cell
+ * @param {Number} state - initial state of the cell.
+ * @param {Number} threshold - threshold needed for the cell to hit to create an impulse
+ * @param {Number} trasmitter - the value transmitted when the impulse is triggered
+ */
 module.exports = ({state, threshold, transmitter}) => {
   state = state || 0;
   threshold = threshold || 10;
@@ -68,7 +78,7 @@ module.exports = ({state, threshold, transmitter}) => {
   const neutralize = () => {
     if (state) {
       process.nextTick(() => {
-        state = parseInt(state / 3);
+        state = parseInt(state / REFRACTOR_MULTIPLIER);
         if (state) {
           neutralize();
         }
@@ -97,6 +107,7 @@ module.exports = ({state, threshold, transmitter}) => {
     objectMode: true
   },
   function (input, encoding, callback) {
+    //console.log('state', state, 'refractory', refractory, 'multiplier', REFRACTOR_MULTIPLIER);
     if (refractory) {
       return callback();
     }

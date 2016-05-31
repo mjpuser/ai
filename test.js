@@ -1,7 +1,7 @@
 const cell = require('./cell');
 const cellStream = cell({});
 const through2 = require('through2');
-cellStream.write([1,2,3]);
+cellStream.write([-1,-2,-3, -10]);
 
 function kick(times) {
   if (times > 0) {
