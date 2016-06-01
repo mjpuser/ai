@@ -26,7 +26,7 @@ const through2 = require('through2');
 
 // circuits shouldn't be viewed as "what are they doing in general"... Circuits should
 // be viewed as structures that solve a task.  Like, is this a line?  Is this a curve?  Is
-// it moving left, etc...
+// it moving left?  color? etc...
 
 // CIRCUITS
 // E -> E -> E | Excites
