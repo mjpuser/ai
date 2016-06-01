@@ -1,4 +1,4 @@
-const cell = require('./cell');
+const cell = require('../lib/cell');
 const cellStream = cell({});
 const through2 = require('through2');
 cellStream.write([-1,-2,-3, -10]);
