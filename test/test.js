@@ -1,5 +1,5 @@
-const cell = require('../lib/cell');
-const cellStream = cell({});
+const Cell = require('../lib/cell').ActionPotential;
+const cellStream = Cell({});
 const through2 = require('through2');
 cellStream.write([-1,-2,-3, -10]);
 
