@@ -20,7 +20,7 @@ describe('GradedPotential', () => {
             done();
          });
       });
-      it('should output the current state', (done) => {
+      it('should output the current state if no connections', (done) => {
          const input = 9;
          let isInputEqualOutput = false;
          cell.write(input);
@@ -29,6 +29,21 @@ describe('GradedPotential', () => {
          });
          process.nextTick(() => {
             assert.equal(isInputEqualOutput, true, 'The output should be the state');
+            done();
+         });
+      });
+      it('should output the current state / 2 if it has two connections', (done) => {
+         const input = 10;
+         let output;
+         const otherCell = GradedPotential();
+         cell.feed(otherCell);
+         cell.feed(otherCell);
+         cell.write(input);
+         cell.on('data', (state) => {
+            output = state;
+         });
+         process.nextTick(() => {
+            assert.equal(output, input/2, 'The output should be 1/2 the input');
             done();
          });
       });

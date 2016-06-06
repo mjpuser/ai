@@ -16,3 +16,23 @@
 //   console.log('chunk', chunk);
 //   next();
 // }));
+
+
+const Horizontal = require('../lib/retina/Horizontal');
+const GradedPotentialCell = require('../lib/cell/GradedPotential');
+
+const surroundCone1 = GradedPotentialCell();
+const surroundCone2 = GradedPotentialCell();
+const surroundCone3 = GradedPotentialCell();
+const centerCone = GradedPotentialCell();
+const horizontal = Horizontal();
+
+horizontal.center(centerCone);
+horizontal.surround(surroundCone1);
+horizontal.surround(surroundCone3);
+horizontal.surround(surroundCone2);
+centerCone.name = 'center';
+surroundCone1.name = 'surround1';
+surroundCone2.name = 'surround2';
+surroundCone3.name = 'surround3';
+centerCone.write(5);
