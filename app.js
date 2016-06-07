@@ -1,66 +1,80 @@
 'use strict';
 
-const cell = require('./lib/cell');
+const GanglionCell = require('./lib/retina/Ganglion');
+const BipolarCell = require('./lib/retina/Bipolar');
+const HorizontalCell = require('./lib/retina/Horizontal');
+const ConeCell = require('./lib/retina/Cone');
+
+// create cones
+// c c c
+// c c c
+// c c c
+// horizontal cells span the 9x9 cone
+// c      c    c
+//   \  /  /
+// c - H -c -- c
+//   /  \    \
+// c      c    c
+// bipolars
+// 1 bipolar per 3 cones
+// 3 * 70 * 70
+// ganglion
+// 3 bipolars per 1 ganglion
+
 
 // rods will not be used.
 // cones input from light to bipolar and horizontal
-const cones = {
-   potential: 'graded',
-   columns: 200,
-   rows: 200,
-   input: () => {
-      return {
-         layers: ['video stream?']
-      }
-   },
-   output: () => {
-      return {
-         layers: [
-            { layer: horizontals, ratio: 100 },
-            { layer: bipolars, ratio: 100 }
-         ]
-      }
-   }
-};
+// 70 x 70 x 9 = 44.1k
 
-// horizontals input from rods + cones to bipolar
-const horizontals = {
-   potential: 'graded',
-   columns: 50,
-   rows: 50
-};
+// horizontals input from cones to cones
+// 70 * 70 = 4.9k
 
 // bipolar input from cones + horizontal to ganglion
 // output to two areas.
-// if depolarize for dark, they output to layer 1,
-// if depolarize for light, they output to layer 2
-//
-const bipolars = {
-   potential: 'graded',
-   columns: 50,
-   rows: 50
-};
+// 70 x 70 x 3 = 14.7k
 
 // ganglion input from bipolar to LGN
-const ganglions = {
-   potential: 'action',
-   columns: 35,
-   rows: 35
+// 70 x 70 = 4.9k
+
+const centerSurround = () => {
+   const ganglion = GanglionCell();
+   const bipolars = times(3, () => BipolarCell());
+   const horizontal = HorizontalCell();
+   const cones = times(9, () => ConeCell());
+
+   // bind cones to horizontals
+   cones.forEach((cone, i) => {
+      if (i===4) {
+         horizontal.center(cone);
+      } else {
+         horizontal.surround(cone);
+      }
+   });
+
+   // bind cones to bipolars
+   cones.forEach((cone, i) => {
+      cone.feed(bipolars[i % 3]);
+   });
+
+   // bind bipolars to ganglion
+   bipolars.forEach((bipolar) => {
+      bipolar.feed(ganglion);
+   });
+
+   return {
+      ganglion,
+      bipolars,
+      horizontal,
+      cones
+   };
 };
 
-const creator = (config) => {
-   const cells = [];
-   const total = config.columns * config.rows;
-   const Cell = config.type === 'graded' ? cell.GradedPotential : cell.ActionPotential;
-   for (let i = 0; i<total; i++) {
-      cells.push(new Cell({}));
+const times = (num, fn) => {
+   const arr = [];
+   for (let i=0; i<num; i++) {
+      arr.push(fn(i));
    }
-   return cells;
+   return arr;
 };
 
-const a = creator(cones);
-const b = creator(horizontals);
-const c = creator(bipolars);
-const d = creator(ganglions);
-
-console.log('created', a.length + b.length + c.length + d.length, 'cells');
+const centerSurrounds = times(70 * 70, centerSurround);
