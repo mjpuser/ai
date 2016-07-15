@@ -34,13 +34,36 @@ const ConeCell = require('./lib/retina/Cone');
 // 70 x 70 x 3 = 14.7k
 
 // ganglion input from bipolar to LGN
-// 70 x 70 = 4.9k
+// 23 x 23 = 529
+const DIMENSION = 23;
+const TOTAL = Math.pow(DIMENSION, 2); // total Ganglions
+const colors = [
+   'r', 'g', 'b'
+];
+const inputTransform = (colorIndex) => {
+   return (input) => input[colorIndex];
+};
 
-const centerSurround = () => {
-   const ganglion = GanglionCell();
+// 2D array of cones
+// retina[0] = [R0, B0, G0]
+// retina[1] = [R1, B1, G1]
+// etc... matches up with the rawvideo data
+const retina = {
+   r: [],
+   g: [],
+   b: []
+};
+
+const centerSurround = (color, index) => {
+   const colorIndex = colors.indexOf(color);
+   const ganglion = GanglionCell(null, color);
    const bipolars = times(3, () => BipolarCell());
    const horizontal = HorizontalCell();
-   const cones = times(9, () => ConeCell());
+   const cones = times(9, () => {
+      return ConeCell({
+         inputTransform: inputTransform(colorIndex)
+      });
+   });
 
    // bind cones to horizontals
    cones.forEach((cone, i) => {
@@ -49,6 +72,18 @@ const centerSurround = () => {
       } else {
          horizontal.surround(cone);
       }
+   });
+
+   // push into a 3x matrix -> 1D arr
+   const CONE_DIMENSION = 3; // 3 x 3 per ganglion
+   const xOffset = index % DIMENSION;
+   const yOffset = Math.floor(index / DIMENSION);
+   const eye = retina[color];
+   cones.forEach((cone, i) => {
+      const coneXOffset = (CONE_DIMENSION * xOffset) + (i % CONE_DIMENSION);
+      const coneYOffset = (CONE_DIMENSION * yOffset) + Math.floor(i / CONE_DIMENSION);
+      const coneIndex = coneXOffset + (coneYOffset * DIMENSION * CONE_DIMENSION);
+      eye[coneIndex] = cone;
    });
 
    // bind cones to bipolars
@@ -77,4 +112,8 @@ const times = (num, fn) => {
    return arr;
 };
 
-const centerSurrounds = times(70 * 70, centerSurround);
+const threeEyedMonster = {
+   r: times(TOTAL, centerSurround.bind(null, 'r')),
+   g: times(TOTAL, centerSurround.bind(null, 'g')),
+   b: times(TOTAL, centerSurround.bind(null, 'b'))
+};
