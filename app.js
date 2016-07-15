@@ -24,14 +24,14 @@ const ConeCell = require('./lib/retina/Cone');
 
 // rods will not be used.
 // cones input from light to bipolar and horizontal
-// 70 x 70 x 9 = 44.1k
+// 23 x 23 x 9 = 4761
 
 // horizontals input from cones to cones
-// 70 * 70 = 4.9k
+// 23 x 23 = 529
 
 // bipolar input from cones + horizontal to ganglion
 // output to two areas.
-// 70 x 70 x 3 = 14.7k
+// 23 x 23 x 3 = 1587
 
 // ganglion input from bipolar to LGN
 // 23 x 23 = 529
