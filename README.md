@@ -18,3 +18,8 @@ There are two types of ganglion cells, transient and sustained.  Transient gangl
 
 #Fovea
 Although there are more than 130 million retinal receptors, there are only approximately 1.2 million fibres (axons) in the optic nerve; a large amount of pre-processing is performed within the retina. The fovea produces the most accurate information. Despite occupying about 0.01% of the visual field (less than 2° of visual angle), about 10% of axons in the optic nerve are devoted to the fovea. The resolution limit of the fovea has been determined at around 10,000 points.[clarification needed] See visual acuity. The information capacity is estimated at 500,000 bits per second (for more information on bits, see information theory) without colour or around 600,000 bits per second including colour.[citation needed] [https://en.wikipedia.org/wiki/Retina]
+
+
+# ffmpeg
+
+```ffmpeg -video_size 10x10 -framerate 1 -f x11grab -i :0.0 -c:v rawvideo -pix_fmt:v rgb24 -f rawvideo -```
