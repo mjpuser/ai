@@ -35,7 +35,7 @@ const ConeCell = require('./lib/retina/Cone');
 
 // ganglion input from bipolar to LGN
 // 23 x 23 = 529
-const DIMENSION = 23;
+const DIMENSION = 3;
 const TOTAL = Math.pow(DIMENSION, 2); // total Ganglions
 const colors = [
    'r', 'g', 'b'
@@ -96,6 +96,9 @@ const centerSurround = (color, index) => {
       bipolar.feed(ganglion);
    });
 
+   // index the ganglion
+   ganglion.index = index;
+
    return {
       ganglion,
       bipolars,
@@ -117,3 +120,8 @@ const threeEyedMonster = {
    g: times(TOTAL, centerSurround.bind(null, 'g')),
    b: times(TOTAL, centerSurround.bind(null, 'b'))
 };
+
+retina.monster = threeEyedMonster;
+retina.dimension = DIMENSION;
+retina.total = TOTAL;
+module.exports = retina;

@@ -22,4 +22,4 @@ Although there are more than 130 million retinal receptors, there are only appro
 
 # ffmpeg
 
-```ffmpeg -video_size 10x10 -framerate 1 -f x11grab -i :0.0 -c:v rawvideo -pix_fmt:v rgb24 -f rawvideo -```
+```ffmpeg -video_size 69x69 -framerate 10 -f x11grab -i :0.0 -c:v rawvideo -pix_fmt:v rgb24 -f rawvideo -```
